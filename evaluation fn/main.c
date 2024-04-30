@@ -2,41 +2,104 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
+#include <ctype.h>
+/// PART1: stack implementation using linkedlist
+// first->chars stack
+typedef struct
+{
+    char data1;
+    struct node1 *next1;
+} node1;
+typedef struct
+{
+    node1 *top1;
+} stack1;
+stack1 *initialize1()
+{
+    stack1 *s = malloc(sizeof(stack1));
+    s->top1 = NULL;
+    return s;
+}
+node1 *newnode1(char x)
+{
+    node1 *n = malloc(sizeof(node1));
+    n->data1 = x;
+    n->next1 = NULL;
+    return n;
+}
+int isEmpty1(stack1 *s)
+{
+    if (s->top1 == NULL)
+        return 1;
+    else
+        return 0;
+}
+void push1(stack1 *s, char x)
+{
+    node1 *n = newnode1(x);
+    if (isEmpty1(s))
+    {
+        s->top1 = n;
+    }
+    else
+    {
+        n->next1 = s->top1;
+        s->top1 = n;
+    }
+}
+char pop1(stack1 *s)
+{
+    if (!isEmpty1(s))
+    {
+        char x = s->top1->data1;
+        node1 *temp = s->top1;
+        s->top1 = s->top1->next1;
+        free(temp);
+        return (x);
+    }
+}
+char top1(stack1 *s)
+{
+    if (!isEmpty1(s))
+    {
+        return (s->top1->data1);
+    }
+}
+// Second: Float stack
 typedef struct node
 {
     float data;
-    struct node* next;
+    struct node *next;
 } node;
 
 typedef struct
 {
-    node* top;
+    node *top;
 } stack;
 
-stack* initialize()
+stack *initialize()
 {
-    stack* s = malloc(sizeof(stack));
+    stack *s = malloc(sizeof(stack));
     s->top = NULL;
     return s;
 }
 
-node* newnode(float x)
+node *newnode(float x)
 {
-    node* n = malloc(sizeof(node));
+    node *n = malloc(sizeof(node));
     n->data = x;
     n->next = NULL;
     return n;
 }
 
-int isEmpty(stack* s)
+int isEmpty(stack *s)
 {
     return s->top == NULL;
 }
 
-void push(stack* s, float x)
+void push(stack *s, float x)
 {
-    node* n = newnode(x);
+    node *n = newnode(x);
     if (isEmpty(s))
     {
         s->top = n;
@@ -48,19 +111,20 @@ void push(stack* s, float x)
     }
 }
 
-float pop(stack* s)
+float pop(stack *s)
 {
     if (s->top)
     {
         float x = s->top->data;
-        node* temp = s->top;
+        node *temp = s->top;
         s->top = s->top->next;
         free(temp);
         return x;
     }
-
 }
+/// TASK2:Convertion
 
+/// TASK3: Evaluation the exp
 float evaluate(char c, float x, float y)
 {
     switch (c)
@@ -82,11 +146,11 @@ float evaluate(char c, float x, float y)
     }
 }
 
-float evaluatePostfix(char* postfix)
+float evaluatePostfix(char *postfix)
 {
-    char* tok;
+    char *tok;
     float a, b, result, num;
-    stack* s = initialize();
+    stack *s = initialize();
     tok = strtok(postfix, " ");
 
     while (tok)
@@ -112,7 +176,7 @@ float evaluatePostfix(char* postfix)
 
 int main()
 {
-    char exp []= "10 3 5 * 16 4 - / +";
+    char exp[] = "10 3 5 * 16 4 - / +";
     float res = evaluatePostfix(exp);
     printf("%f\n", res);
     return 0;
