@@ -1,67 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
-///Part 1: stack implementation using linkedlist
-typedef struct
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+float evaluate (char c, float x, float y)
 {
-    float data;
-    struct node* next;
-} node;
-typedef struct
-{
-    node* top;
-} stack;
-stack* initialize()
-{
-    stack* s= malloc (sizeof (stack));
-    s->top=NULL;
-    return s;
-}
-node* newnode(float x)
-{
-    node*n=malloc(sizeof(node));
-    n->data=x;
-    n->next=NULL;
-    return n;
-}
-int isEmpty(stack*s)
-{
-    if(s->top==NULL)
-        return 1;
-    else return 0;
-}
-node* push(stack *s,float x)
-{
-    node*n=newnode(x);
-    if(isEmpty(s))
+    switch(c)
     {
-        s->top=n;
-    }
-    else
-    {
-        n->next=s->top;
-        s->top=n;
+    case '*':
+        return x*y;
+    case '/':
+        return x/y;
+     case '%':
+            return fmod(x,y);
+    case '+':
+        return x+y;
+    case '-':
+        return x-y;
+    case '^':
+        return pow(x,y);
+    default:
+        return;
+
     }
 }
-float pop(stack *s)
+float evaluatePostfix (char*postfix)
 {
-   if(s->top){
-    float x= s->top->data;
-    node*temp=s->top;
-    s->top=s->top->next;
-    free(temp);
-   }
+
+
+    float a,b,result;
+    stack *s= initialize();
+    for(int i=0; i<strlen(postfix); i++)
+    {
+        if(isdigit(postfix[i]))
+            push(s,postfix[i]-'0');
+
+        else
+        {
+            a=pop(s);
+            b=pop(s);
+            result= evaluate(postfix[i],b,a);
+            push(s,result);
+        }
+    }
+    result=pop(s);
+    return result;
+
 }
 int main()
 {
-    ///Testing part one
-    stack*s=initialize();
-    printf("%d\n",isEmpty(s));
-    push(s,5.6);
-    printf("%d\n",isEmpty(s));
-    push(s,10.5);
-    printf("%f\n",pop(s));
-    printf("%f\n",pop(s));
-    printf("%f\n",pop(s));
-    free(s);
-    ///
+
+    char *exp=" 124*+3+";
+    float res=evaluatePostfix(exp);
+    printf("%f",res);
+
+
 }
+
+
