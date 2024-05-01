@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1714603061 source:c:\users\reem\documents\github\bms\expression-evaluation-infix-to-postfix\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<ctype.h>
+
