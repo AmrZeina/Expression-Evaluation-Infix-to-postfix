@@ -123,7 +123,55 @@ float pop(stack *s)
     }
 }
 /// TASK2:Convertion
+char *infixToPostfix(char *infix)
+{
+    char *postfix = malloc(2 * strlen(infix) + 1);
+    char ss[strlen(infix) + 1];
+    strcpy(ss, infix);
+    char *op = strtok(ss, " ");
+    int count = 0;
+    stack1 *s = initialize1();
+    while (op != NULL)
+    {
+        if (isdigit(op[0]))
+        {
+            int i = 0;
+            while (op[i] != '\0')
+            {
+                postfix[count++] = op[i++];
+            }
+            postfix[count++] = ' ';
+        }
+        else if (op[0] == ')')
+        {
+            while (!isEmpty1(s) && top1(s) != '(')
+            {
+                postfix[count++] = pop1(s);
+                postfix[count++] = ' ';
+            }
 
+            if (!isEmpty1(s) && top1(s) == '(')
+            {
+                pop1(s);
+            }
+        }
+        else
+        {
+            while (!isEmpty1(s) && priority(op[0]) <= priority(top1(s)) && top1(s) != '(')
+            {
+                postfix[count++] = pop1(s);
+                postfix[count++] = ' ';
+            }
+            push1(s, op[0]);
+        }
+        op = strtok(NULL, " ");
+    }
+    while (!isEmpty1(s))
+        postfix[count++] = pop1(s);
+    postfix[count] = '\0';
+    free(s);
+    return postfix;
+}
 /// TASK3: Evaluation the exp
 float evaluate(char c, float x, float y)
 {
