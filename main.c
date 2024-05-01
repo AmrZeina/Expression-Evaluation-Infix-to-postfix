@@ -123,6 +123,17 @@ float pop(stack *s)
     }
 }
 /// TASK2:Convertion
+int priority(char x)
+{
+    if (x == '^')
+        return 3;
+    else if (x == '*' || x == '%' || x == '/')
+        return 2;
+    else if (x == '-' || x == '+' || x == '–')
+        return 1;
+    else
+        return 0;
+}
 char *infixToPostfix(char *infix)
 {
     char *postfix = malloc(2 * strlen(infix) + 1);
