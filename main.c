@@ -125,16 +125,22 @@ float pop(stack *s)
 /// TASK2:Convertion
 int priority(char x)
 {
-    if (x == '(')
+    switch(x)
+    {
+    case '(':
         return 4;
-    else if (x == '^')
+    case '^':
         return 3;
-    else if (x == '*' || x == '%' || x == '/')
+    case '*':
+    case '%':
+    case '/':
         return 2;
-    else if (x == '-' || x == '+' || x == '–')
+    case '+':
+    case '-':
+    case '–':
         return 1;
-    else
-        return 0;
+
+    }
 }
 char *infixToPostfix(char *infix)
 {
