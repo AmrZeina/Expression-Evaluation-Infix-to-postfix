@@ -125,7 +125,7 @@ float pop(stack *s)
 /// TASK2:Convertion
 int priority(char x)
 {
-    switch(x)
+    switch (x)
     {
     case '(':
         return 4;
@@ -137,9 +137,7 @@ int priority(char x)
         return 2;
     case '+':
     case '-':
-    case '–':
         return 1;
-
     }
 }
 char *infixToPostfix(char *infix)
@@ -152,7 +150,7 @@ char *infixToPostfix(char *infix)
     stack1 *s = initialize1();
     while (op != NULL)
     {
-        if (isdigit(op[0])||(op[0]=='-'&&isdigit(op[1])))
+        if (isdigit(op[0]) || (op[0] == '-' && isdigit(op[1])))
         {
             int i = 0;
             while (op[i] != '\0')
@@ -225,7 +223,7 @@ float evaluatePostfix(char *postfix)
 
     while (tok)
     {
-        if (isdigit(tok[0])||(tok[0]=='-'&&isdigit(tok[1])))
+        if (isdigit(tok[0]) || (tok[0] == '-' && isdigit(tok[1])))
         {
             num = atof(tok);
             push(s, num);
@@ -241,19 +239,20 @@ float evaluatePostfix(char *postfix)
     }
 
     result = pop(s);
+    free(s);
     return result;
 }
 int main()
 {
     char exp1[] = " 1 + 2 * 4 + 3 ";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp1,infixToPostfix(exp1),evaluatePostfix(infixToPostfix(exp1)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp1, infixToPostfix(exp1), evaluatePostfix(infixToPostfix(exp1)));
     char exp2[] = " ( 1 + 2 ) * 4 + 3";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp2,infixToPostfix(exp2),evaluatePostfix(infixToPostfix(exp2)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp2, infixToPostfix(exp2), evaluatePostfix(infixToPostfix(exp2)));
     char exp3[] = "10 + 3 * 5 / ( 16 - 4 )";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp3,infixToPostfix(exp3),evaluatePostfix(infixToPostfix(exp3)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp3, infixToPostfix(exp3), evaluatePostfix(infixToPostfix(exp3)));
     char exp4[] = "2 + 3 * 4 ";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp4,infixToPostfix(exp4),evaluatePostfix(infixToPostfix(exp4)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp4, infixToPostfix(exp4), evaluatePostfix(infixToPostfix(exp4)));
     char exp5[] = "2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 ) ";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp5,infixToPostfix(exp5),evaluatePostfix(infixToPostfix(exp5)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp5, infixToPostfix(exp5), evaluatePostfix(infixToPostfix(exp5)));
     return 0;
 }
