@@ -4,68 +4,6 @@
 #include <math.h>
 #include <ctype.h>
 /// PART1: stack implementation using linkedlist
-// first->chars stack
-typedef struct
-{
-    char data1;
-    struct node1 *next1;
-} node1;
-typedef struct
-{
-    node1 *top1;
-} stack1;
-stack1 *initialize1()
-{
-    stack1 *s = malloc(sizeof(stack1));
-    s->top1 = NULL;
-    return s;
-}
-node1 *newnode1(char x)
-{
-    node1 *n = malloc(sizeof(node1));
-    n->data1 = x;
-    n->next1 = NULL;
-    return n;
-}
-int isEmpty1(stack1 *s)
-{
-    if (s->top1 == NULL)
-        return 1;
-    else
-        return 0;
-}
-void push1(stack1 *s, char x)
-{
-    node1 *n = newnode1(x);
-    if (isEmpty1(s))
-    {
-        s->top1 = n;
-    }
-    else
-    {
-        n->next1 = s->top1;
-        s->top1 = n;
-    }
-}
-char pop1(stack1 *s)
-{
-    if (!isEmpty1(s))
-    {
-        char x = s->top1->data1;
-        node1 *temp = s->top1;
-        s->top1 = s->top1->next1;
-        free(temp);
-        return (x);
-    }
-}
-char top1(stack1 *s)
-{
-    if (!isEmpty1(s))
-    {
-        return (s->top1->data1);
-    }
-}
-// Second: Float stack
 typedef struct node
 {
     float data;
@@ -97,9 +35,9 @@ int isEmpty(stack *s)
     return s->top == NULL;
 }
 
-void push(stack *s, float x)
+void push(stack *s, float value)
 {
-    node *n = newnode(x);
+    node *n = newnode(value);
     if (isEmpty(s))
     {
         s->top = n;
@@ -120,6 +58,13 @@ float pop(stack *s)
         s->top = s->top->next;
         free(temp);
         return x;
+    }
+}
+float peek(stack *s)
+{
+    if (!isEmpty(s))
+    {
+        return (s->top->data);
     }
 }
 /// TASK2:Convertion
@@ -147,7 +92,7 @@ char *infixToPostfix(char *infix)
     strcpy(ss, infix);
     char *op = strtok(ss, " ");
     int count = 0;
-    stack1 *s = initialize1();
+    stack *s = initialize();
     while (op != NULL)
     {
         if (isdigit(op[0]) || (op[0] == '-' && isdigit(op[1])))
@@ -161,31 +106,31 @@ char *infixToPostfix(char *infix)
         }
         else if (op[0] == ')')
         {
-            while (!isEmpty1(s) && top1(s) != '(')
+            while (!isEmpty(s) && peek(s) != '(')
             {
-                postfix[count++] = pop1(s);
+                postfix[count++] = (char)pop(s);
                 postfix[count++] = ' ';
             }
 
-            if (!isEmpty1(s) && top1(s) == '(')
+            if (!isEmpty(s) && peek(s) == '(')
             {
-                pop1(s);
+                pop(s);
             }
         }
         else
         {
-            while (!isEmpty1(s) && priority(op[0]) <= priority(top1(s)) && top1(s) != '(')
+            while (!isEmpty(s) && priority(op[0]) <= priority(peek(s)) && peek(s) != '(')
             {
-                postfix[count++] = pop1(s);
+                postfix[count++] = (char)pop(s);
                 postfix[count++] = ' ';
             }
-            push1(s, op[0]);
+            push(s, op[0]);
         }
         op = strtok(NULL, " ");
     }
-    while (!isEmpty1(s))
+    while (!isEmpty(s))
     {
-        postfix[count++] = pop1(s);
+        postfix[count++] = (char)pop(s);
         postfix[count++] = ' ';
     }
     postfix[count] = '\0';
@@ -242,17 +187,29 @@ float evaluatePostfix(char *postfix)
     free(s);
     return result;
 }
+float printNearestDPoint(float x)
+{
+    if (x == (int)x)
+        printf("Value: %.1f\n\n", x);
+    else
+        printf("Value: %.2f\n\n", x);
+}
 int main()
 {
     char exp1[] = " 1 + 2 * 4 + 3 ";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp1, infixToPostfix(exp1), evaluatePostfix(infixToPostfix(exp1)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\n", exp1, infixToPostfix(exp1));
+    printNearestDPoint(evaluatePostfix(infixToPostfix(exp1)));
     char exp2[] = " ( 1 + 2 ) * 4 + 3";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp2, infixToPostfix(exp2), evaluatePostfix(infixToPostfix(exp2)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\n", exp2, infixToPostfix(exp2));
+    printNearestDPoint(evaluatePostfix(infixToPostfix(exp2)));
     char exp3[] = "10 + 3 * 5 / ( 16 - 4 )";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp3, infixToPostfix(exp3), evaluatePostfix(infixToPostfix(exp3)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\n", exp3, infixToPostfix(exp3));
+    printNearestDPoint(evaluatePostfix(infixToPostfix(exp3)));
     char exp4[] = "2 + 3 * 4 ";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp4, infixToPostfix(exp4), evaluatePostfix(infixToPostfix(exp4)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\n", exp4, infixToPostfix(exp4));
+    printNearestDPoint(evaluatePostfix(infixToPostfix(exp4)));
     char exp5[] = "2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 ) ";
-    printf(" Input (Infix): %s\nOutput (Postfix): %s\nValue: %f\n\n", exp5, infixToPostfix(exp5), evaluatePostfix(infixToPostfix(exp5)));
+    printf(" Input (Infix): %s\nOutput (Postfix): %s\n", exp5, infixToPostfix(exp5));
+    printNearestDPoint(evaluatePostfix(infixToPostfix(exp5)));
     return 0;
 }
